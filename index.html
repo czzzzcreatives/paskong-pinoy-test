@@ -243,6 +243,36 @@ img,svg,video,canvas{max-width:100%;height:auto}
  .question-lang-btn{min-width:0!important;padding:7px 9px!important}
 }
 
+
+/* v2.10 — compact team setup and consistent pause icon control */
+.team-setup-panel{padding:12px 14px;margin:10px 0}
+.team-name-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.team-name-grid .field{gap:4px;font-size:12px}
+.team-name-grid input{padding:8px 10px;font-size:14px;min-height:38px}
+#teamFields>label.field select{padding:9px 11px;min-height:40px}
+.game-controls{align-items:center;gap:10px}
+.pause-icon-btn{
+ width:48px;height:48px;min-width:48px;padding:0!important;
+ display:inline-flex;align-items:center;justify-content:center;
+ border:1px solid #f0d98f;
+ border-radius:14px!important;
+ background:linear-gradient(180deg,#fffdf5,#f5e7bd)!important;
+ color:#59451a!important;
+ box-shadow:0 4px 0 #d8bd78,0 7px 12px #6a4a1018!important;
+ font-size:23px!important;font-weight:900;line-height:1;
+}
+.pause-icon-btn:hover{background:linear-gradient(180deg,#fff,#ffefc2)!important}
+.pause-icon-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #d8bd78!important}
+@media(max-width:760px){
+ .team-name-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:420px){
+ .team-setup-panel{padding:10px}
+ .team-name-grid{gap:7px}
+ .team-name-grid input{padding:8px;font-size:13px}
+ .pause-icon-btn{width:44px;height:44px;min-width:44px}
+}
+
 </style></head>
 <body>
 <div class="app">
@@ -298,9 +328,9 @@ Answer: A</pre>
 </div>
 </div>
 <div id="playerField" style="margin-top:12px"><label class="field">Player name<input id="playerName" value="Player 1" maxlength="24"></label></div>
-<div id="teamFields" class="panel" style="display:none;margin-top:12px">
+<div id="teamFields" class="panel team-setup-panel" style="display:none;margin-top:12px">
 <label class="field">Number of teams<select id="teamCount"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label>
-<div id="teamNames" class="grid" style="margin-top:10px"></div>
+<div id="teamNames" class="grid team-name-grid" style="margin-top:8px"></div>
 </div>
 <div class="grid" style="margin-top:12px">
 <label class="field">Timer per question / Oras bawat tanong<select id="timer"><option value="off">Off / Walang timer</option><option value="5">5 seconds / 5 segundo</option><option value="10">10 seconds / 10 segundo</option><option value="15" selected>15 seconds / 15 segundo</option></select></label>
@@ -326,7 +356,7 @@ Answer: A</pre>
 </div>
 </section>
 <section id="game" class="screen">
-<div class="topline"><span id="qCount" class="pill">Question 1 of 15</span><span id="difficulty" class="pill">EASY</span><span id="timerDisplay" class="timer"></span><button type="button" class="secondary no-print" id="pauseTimerBtn" style="display:none;padding:7px 12px;font-size:13px">⏸ Pause Timer</button></div>
+<div class="topline"><span id="qCount" class="pill">Question 1 of 15</span><span id="difficulty" class="pill">EASY</span><span id="timerDisplay" class="timer"></span></div>
 <div class="progress"><div id="progressBar" class="bar"></div></div>
 <div class="topline"><span id="playerLabel"></span><span id="scoreLabel">Score: 0</span></div>
 <div id="teamBoard" class="scoreboard" style="display:none"></div>
@@ -337,7 +367,7 @@ Answer: A</pre>
 <button type="button" class="secondary question-lang-btn" id="questionTagalogBtn" aria-pressed="false">Tagalog</button>
 </div>
 <h2 id="questionText">Question text</h2><div id="choices"></div><div id="feedback" class="feedback" hidden></div>
-<div class="actions"><button id="nextBtn" class="primary" disabled>Next Question →</button></div></div>
+<div class="actions game-controls"><button id="nextBtn" class="primary" disabled>Next Question →</button><button type="button" class="secondary no-print pause-icon-btn" id="pauseTimerBtn" style="display:none" aria-label="Pause timer" title="Pause timer">Ⅱ</button></div></div>
 </section>
 <section id="results" class="screen">
 <div class="result-hero">
@@ -562,7 +592,10 @@ function launchGame(){
 
 function updatePauseButton(){
  const b=$("pauseTimerBtn");if(!b)return;
- b.textContent=timerPaused?"▶ Resume Timer":"⏸ Pause Timer";
+ const label=timerPaused?"Resume timer":"Pause timer";
+ b.textContent=timerPaused?"▶":"Ⅱ";
+ b.setAttribute("aria-label",label);
+ b.setAttribute("title",label);
  b.setAttribute("aria-pressed",String(timerPaused));
 }
 function countdownTick(){
