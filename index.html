@@ -304,10 +304,10 @@ Answer: A</pre>
 </div>
 <div class="grid" style="margin-top:12px">
 <label class="field">Timer per question / Oras bawat tanong<select id="timer"><option value="off">Off / Walang timer</option><option value="5">5 seconds / 5 segundo</option><option value="10">10 seconds / 10 segundo</option><option value="15" selected>15 seconds / 15 segundo</option></select></label>
-<label class="field">Maximum questions / Pinakamaraming tanong<select id="questionLimit"><option value="5">5 questions</option><option value="10">10 questions</option><option value="15" selected>15 questions</option></select></label>
+<label class="field" id="questionLimitField">Maximum questions / Pinakamaraming tanong<select id="questionLimit"><option value="5">5 questions</option><option value="10">10 questions</option><option value="15" selected>15 questions</option></select></label><div class="field" id="teamQuestionInfo" style="display:none"><span>Team question allocation / Hati ng mga tanong</span><div class="pill" id="teamQuestionSummary" style="padding:12px">2 teams × 5 questions = 10 total</div><span class="small muted">Each team receives exactly 5 turns. The total adjusts automatically when you change the number of teams.</span></div>
 <label class="field">Game sounds / Tunog ng laro<select id="soundToggle"><option value="on" selected>On / Bukas</option><option value="off">Off / Patay</option></select></label>
 </div>
-<p class="small muted">Choose 5, 10, or 15 questions · Built-in or custom question sets · 10 points per correct answer</p>
+<p class="small muted" id="questionRuleHint">Solo: choose 5, 10, or 15 questions. Team mode: 5 questions per team, allocated equally. 10 points per correct answer.</p>
 <p class="small muted">The game uses a consistent bilingual English-Filipino / Taglish style. Custom questions appear as you type them. Mix mode includes a balanced mix of built-in and your saved questions.</p>
 <p class="small muted">Game master: finish your settings and questions, then continue to the private player-ready screen. Players will not see this setup page.</p>
 <button class="primary" style="width:100%;margin-top:8px" id="startBtn">Continue to Player Screen / Susunod →</button>
@@ -379,7 +379,23 @@ const bank=[
 {d:"Hard",q:"What is the traditional Filipino name for the star-shaped Christmas lantern?",f:"Ano ang tradisyonal na tawag ng mga Pilipino sa hugis-bituing ilaw tuwing Pasko?",a:["Parol","Korona","Kandila","Banderitas"],c:0,e:"The parol is a distinctive Filipino Christmas lantern, often shaped like a star.",ef:"Ang parol ay natatanging ilaw-pamasko ng mga Pilipino na karaniwang hugis-bituin."},
 {d:"Hard",q:"What do children traditionally do when visiting their godparents during the Christmas season?",f:"Ano ang karaniwang ginagawa ng mga bata kapag bumibisita sa kanilang mga ninong at ninang tuwing Pasko?",a:["Greet them and ask for a blessing","Lead a procession","Sing a lullaby","Read the Pabasa"],c:0,e:"Children commonly greet their godparents, ask for a blessing, and may receive aguinaldo.",ef:"Binabati ng mga bata ang kanilang ninong at ninang, nagmamano, at kung minsan ay tumatanggap ng aguinaldo."},
 {d:"Hard",q:"What kind of rice is traditionally used to make puto bumbong?",f:"Anong uri ng bigas ang tradisyonal na ginagamit sa paggawa ng puto bumbong?",a:["Glutinous or sticky rice","Cornmeal","Wheat flour","Cassava flour"],c:0,e:"Traditional puto bumbong uses a purple variety of glutinous rice, often called pirurutong.",ef:"Karaniwang gumagamit ang tradisyonal na puto bumbong ng malagkit na bigas na kulay-ube na tinatawag na pirurutong."},
-{d:"Hard",q:"What does the Filipino word 'Pasko' mean in English?",f:"Ano ang kahulugan ng salitang 'Pasko' sa English?",a:["Christmas","New Year","Birthday","Celebration"],c:0,e:"Pasko is the Filipino word for Christmas.",ef:"Ang Pasko ay salitang Filipino para sa Christmas."}
+{d:"Hard",q:"What does the Filipino word 'Pasko' mean in English?",f:"Ano ang kahulugan ng salitang 'Pasko' sa English?",a:["Christmas","New Year","Birthday","Celebration"],c:0,e:"Pasko is the Filipino word for Christmas.",ef:"Ang Pasko ay salitang Filipino para sa Christmas."},
+
+{d:"Easy",q:"What is the Filipino term for Christmas Eve?",f:"Ano ang tawag sa bisperas ng Pasko?",a:["Bisperas ng Pasko","Araw ng mga Patay","Bagong Taon","Araw ng Kalayaan"],c:0,e:"Christmas Eve is commonly called Bisperas ng Pasko.",ef:"Ang Christmas Eve ay tinatawag ding Bisperas ng Pasko."},
+{d:"Easy",q:"Which church tradition involves attending nine dawn or night Masses before Christmas?",f:"Anong tradisyon sa simbahan ang pagdalo sa siyam na misa bago mag-Pasko?",a:["Simbang Gabi","Flores de Mayo","Pabasa","Salubong"],c:0,e:"Simbang Gabi is a series of nine Masses before Christmas.",ef:"Ang Simbang Gabi ay serye ng siyam na misa bago ang Pasko."},
+{d:"Easy",q:"What decoration is often placed at the top of a Christmas tree?",f:"Anong palamuti ang madalas ilagay sa tuktok ng Christmas tree?",a:["Star","Slippers","Plate","Umbrella"],c:0,e:"A star is a popular Christmas tree topper.",ef:"Karaniwang bituin ang inilalagay sa tuktok ng Christmas tree."},
+{d:"Easy",q:"What do Filipinos commonly say to greet one another during Christmas?",f:"Ano ang karaniwang bati ng mga Pilipino tuwing Pasko?",a:["Maligayang Pasko","Mabuhay ang tag-ulan","Magandang umaga lamang","Maligayang anibersaryo"],c:0,e:"Maligayang Pasko means Merry Christmas.",ef:"Ang Maligayang Pasko ay katumbas ng Merry Christmas."},
+{d:"Medium",q:"What is a belen traditionally used to depict?",f:"Ano ang karaniwang inilalarawan ng isang belen?",a:["The Nativity of Jesus","The Last Supper","The creation of the world","A harvest festival"],c:0,e:"A belen depicts the birth of Jesus.",ef:"Inilalarawan ng belen ang kapanganakan ni Hesus."},
+{d:"Medium",q:"Which Filipino Christmas treat is a soft rice cake often wrapped in banana leaves?",f:"Aling kakaning pamasko ang malambot at madalas ibalot sa dahon ng saging?",a:["Suman","Turon","Pichi-pichi","Kutsinta"],c:0,e:"Suman is a rice cake commonly wrapped in banana leaves.",ef:"Ang suman ay kakaning gawa sa malagkit na bigas na madalas ibalot sa dahon ng saging."},
+{d:"Medium",q:"What is commonly placed inside a parol to make it glow?",f:"Ano ang karaniwang inilalagay sa loob ng parol upang ito ay umilaw?",a:["A light or bulb","A candle cake","A bell","A small flag"],c:0,e:"Many modern parols use electric lights or bulbs.",ef:"Maraming modernong parol ang gumagamit ng ilaw o bumbilya."},
+{d:"Medium",q:"Which color is commonly associated with holly berries in Christmas decorations?",f:"Anong kulay ang karaniwang kulay ng berries ng holly sa mga dekorasyong pamasko?",a:["Red","Blue","Purple","Black"],c:0,e:"Traditional holly decorations often feature red berries and green leaves.",ef:"Karaniwang pula ang berries at berde ang dahon ng tradisyonal na holly."},
+{d:"Medium",q:"What is the name for a group of people singing Christmas songs together?",f:"Ano ang tawag sa pangkat ng mga taong sabay-sabay kumakanta ng mga awiting pamasko?",a:["Choir","Orchestra only","Sports team","Dance troupe"],c:0,e:"A choir is a group of singers.",ef:"Ang choir ay pangkat ng mga mang-aawit."},
+{d:"Medium",q:"Which item is traditionally hung on a door as a Christmas decoration?",f:"Aling palamuti ang karaniwang isinasabit sa pinto tuwing Pasko?",a:["Wreath","School bag","Cooking pot","Towel"],c:0,e:"A Christmas wreath is commonly hung on doors.",ef:"Karaniwang isinasabit sa pinto ang Christmas wreath."},
+{d:"Medium",q:"What do people often exchange during a Christmas party?",f:"Ano ang madalas palitan ng mga tao sa Christmas party?",a:["Gifts","Report cards","House keys","Traffic tickets"],c:0,e:"Gift exchanges are a common Christmas party activity.",ef:"Karaniwang aktibidad sa Christmas party ang palitan ng regalo."},
+{d:"Hard",q:"In the song 'Ang Pasko ay Sumapit,' what season has arrived?",f:"Sa kantang 'Ang Pasko ay Sumapit,' anong panahon ang dumating?",a:["Christmas","Summer vacation","Harvest season","School opening"],c:0,e:"The song celebrates the arrival of Christmas.",ef:"Ipinagdiriwang ng kanta ang pagdating ng Pasko."},
+{d:"Hard",q:"What is the Filipino word commonly used for a Christmas gift or present?",f:"Anong salitang Filipino ang karaniwang ginagamit para sa Christmas gift o present?",a:["Regalo","Pahina","Bintana","Sapatos"],c:0,e:"Regalo means gift or present.",ef:"Ang regalo ay nangangahulugang gift o present."},
+{d:"Hard",q:"Which phrase means 'Christmas Eve' in Spanish and is also used in Filipino contexts?",f:"Aling pariralang Espanyol ang ginagamit din sa kontekstong Pilipino para sa Christmas Eve?",a:["Noche Buena","Buen Viaje","Buenos Dias","Muchas Gracias"],c:0,e:"Noche Buena is a Spanish phrase associated with Christmas Eve.",ef:"Ang Noche Buena ay pariralang Espanyol na iniuugnay sa bisperas ng Pasko."},
+{d:"Hard",q:"What is the main purpose of a Christmas countdown calendar?",f:"Ano ang pangunahing layunin ng Christmas countdown calendar?",a:["Count the days until Christmas","List birthdays for the year","Track daily weather","Plan a school timetable"],c:0,e:"A countdown calendar marks the days leading up to Christmas.",ef:"Binibilang nito ang mga araw bago sumapit ang Pasko."}
 ];
 
 const customStorageKey="czee_paskong_pinoy_custom_questions_v1";
@@ -475,10 +491,24 @@ function playCelebration(){
 
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active")}
 function renderTeamInputs(){let n=+$("teamCount").value;$("teamNames").innerHTML="";for(let i=0;i<n;i++){let l=document.createElement("label");l.className="field";l.textContent=(lang==="en"?"Team ":"Pangkat ")+(i+1);let inp=document.createElement("input");inp.id="team"+i;inp.value=(lang==="en"?"Team ":"Pangkat ")+(i+1);inp.maxLength=22;l.append(inp);$("teamNames").append(l)}}
-$("mode").onchange=()=>{let t=$("mode").value==="team";$("teamFields").style.display=t?"block":"none";$("playerField").style.display=t?"none":"block"};
-$("teamCount").onchange=renderTeamInputs;
+function updateQuestionAllocationUI(){
+ const teamMode=$("mode").value==="team";
+ $("teamFields").style.display=teamMode?"block":"none";
+ $("playerField").style.display=teamMode?"none":"block";
+ $("questionLimitField").style.display=teamMode?"none":"block";
+ $("teamQuestionInfo").style.display=teamMode?"block":"none";
+ if(teamMode){
+   const n=+$("teamCount").value;
+   $("teamQuestionSummary").textContent=lang==="en"?`${n} teams × 5 questions = ${n*5} total questions`:`${n} pangkat × 5 tanong = ${n*5} kabuuang tanong`;
+   $("questionRuleHint").textContent=lang==="en"?"Team mode: exactly 5 questions per team. Total questions adjust automatically.":"Team mode: eksaktong 5 tanong bawat pangkat. Awtomatikong inaayos ang kabuuang tanong.";
+ }else{
+   $("questionRuleHint").textContent=lang==="en"?"Solo: choose 5, 10, or 15 questions. 10 points per correct answer.":"Solo: pumili ng 5, 10, o 15 tanong. 10 puntos sa bawat tamang sagot.";
+ }
+}
+$("mode").onchange=updateQuestionAllocationUI;
+$("teamCount").onchange=()=>{renderTeamInputs();updateQuestionAllocationUI()};
 function prepareGame(){soundEnabled=soundIsOn();if(soundEnabled)getAudio();lang="both";questionLanguage="en";timerPaused=false;setQuestionLanguage("en");mode=$("mode").value;teams=[];scores=[];activeTeam=0;correct=0;qIndex=0;
-maxQuestions=+$("questionLimit").value;
+maxQuestions=mode==="team"?(+$("teamCount").value*5):+$("questionLimit").value;
 const source=$("questionSource").value;
 if(mode==="individual"){player=$("playerName").value.trim()||"Player 1"}else{let n=+$("teamCount").value;for(let i=0;i<n;i++)teams.push(($("team"+i)?.value||"Team "+(i+1)).trim());scores=teams.map(()=>0)}
 // Build a balanced selection and guarantee that Mixed mode includes custom questions.
@@ -516,7 +546,7 @@ if(source==="builtIn"){
   }
 }
 if(selected.length<maxQuestions){
-  alert("Only "+selected.length+" questions are available in this selection. Add more questions or choose a smaller game length.");
+  alert("Only "+selected.length+" questions are available for this selection, but "+maxQuestions+" are required. Add more custom questions or choose another question source.");
   return;
 }
 gameQuestions=shufflePool(selected).slice(0,maxQuestions);
@@ -601,7 +631,7 @@ function renderHostPack(){
  const keys=gameQuestions.map((q,i)=>`<div>${i+1}. <strong>${"ABCD"[q.c]||"—"}</strong></div>`).join("");
  pack.innerHTML=`<h1>PASKONG PINOY — HOST PACK</h1>
  <div class="host-note">CZZZZ CREATIVES · Maligayang Pasko! · ${new Date().toLocaleDateString()}</div>
- <p><strong>Game setup:</strong> ${mode==="team"?"Team competition / Pangkat":"Individual / Solo"} · ${gameQuestions.length} questions · ${$("timer").value==="off"?"No timer":$("timer").value+" seconds per question"} · 10 points per correct answer</p>
+ <p><strong>Game setup:</strong> ${mode==="team"?"Team competition / Pangkat":"Individual / Solo"} · ${gameQuestions.length} questions${mode==="team"?" · 5 per team":""} · ${$("timer").value==="off"?"No timer":$("timer").value+" seconds per question"} · 10 points per correct answer</p>
  <h2>Host instructions / Gabay ng host</h2>
  <ol><li>Read each question and all four answer choices aloud.</li><li>Start the selected timer. Players or teams choose one answer.</li><li>A correct answer earns 10 points. An unanswered question earns zero points.</li><li>Use the answer key to check responses. Highest score wins!</li></ol>
  <h2>Question sheet / Mga tanong</h2>${questions}
@@ -667,5 +697,5 @@ $("againBtn").onclick=()=>{
   if(typeof closePrintPreview==="function")closePrintPreview();
   timerPaused=false;
   preparePlayerScreen();
-};$("homeBtn").onclick=()=>{stopTimer();show("home")};renderTeamInputs();renderCustomList();
+};$("homeBtn").onclick=()=>{stopTimer();show("home")};renderTeamInputs();renderCustomList();updateQuestionAllocationUI();
 </script></body></html>
